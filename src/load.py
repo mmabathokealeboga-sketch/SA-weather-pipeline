@@ -35,3 +35,14 @@ def load(df):
     finally:
         conn.close()
     return len(rows)
+
+
+def get_last_date(city):
+    """Return the most recent date stored for a city, or None if there's no data."""
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT MAX(date) FROM daily_weather WHERE city = %s", (city,))
+            return cur.fetchone()[0]
+    finally:
+        conn.close()
