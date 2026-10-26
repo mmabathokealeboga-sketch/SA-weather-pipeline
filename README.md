@@ -2,8 +2,6 @@
 
 An automated ETL pipeline that collects daily weather data for 8 South African cities, validates it, and loads it into a PostgreSQL database.
 
-> 🚧 Work in progress: daily scheduling coming soon.
-
 ## What it does
 
 1. **Extract**: pulls daily weather from the [Open-Meteo](https://open-meteo.com/) archive API
@@ -32,7 +30,7 @@ Johannesburg, Pretoria, Cape Town, Durban, Gqeberha, Bloemfontein, Polokwane, Mb
 
 ## Tech stack
 
-Python · pandas · PostgreSQL · Docker Compose · psycopg2 · pytest · Streamlit · Plotly
+Python · pandas · PostgreSQL · Docker Compose · psycopg2 · pytest · Streamlit · Plotly · cron
 
 ## Project structure
 
@@ -48,6 +46,7 @@ Python · pandas · PostgreSQL · Docker Compose · psycopg2 · pytest · Stream
 │   ├── app.py           # Streamlit dashboard
 │   └── requirements.txt # dashboard dependencies
 ├── db/schema.sql        # database table definition
+├── run_pipeline.sh      # script used by cron for daily runs
 ├── Dockerfile           # pipeline image
 └── docker-compose.yml   # PostgreSQL + pipeline containers
 ```
@@ -98,6 +97,19 @@ streamlit run dashboard/app.py
 
 Then open http://localhost:8501
 
+**Schedule it daily (Linux/macOS):**
+
+```bash
+chmod +x run_pipeline.sh
+crontab -e
+```
+
+Add this line to run the pipeline every day at 08:00:
+
+```
+0 8 * * * /full/path/to/SA-weather-pipeline/run_pipeline.sh >> /full/path/to/SA-weather-pipeline/logs/cron.log 2>&1
+```
+
 ## Roadmap
 
 - [x] Extract, transform, validate, load
@@ -107,7 +119,7 @@ Then open http://localhost:8501
 - [x] Unit tests
 - [x] Containerise the pipeline
 - [x] Streamlit dashboard
-- [ ] Daily scheduling
+- [x] Daily scheduling
 
 # SA-weather-pipeline
 
