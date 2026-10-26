@@ -2,7 +2,7 @@
 
 An automated ETL pipeline that collects daily weather data for 8 South African cities, validates it, and loads it into a PostgreSQL database.
 
-> 🚧 Work in progress: dashboard, tests and scheduling coming soon.
+> 🚧 Work in progress: dashboard and scheduling coming soon.
 
 ## What it does
 
@@ -32,7 +32,7 @@ Johannesburg, Pretoria, Cape Town, Durban, Gqeberha, Bloemfontein, Polokwane, Mb
 
 ## Tech stack
 
-Python · pandas · PostgreSQL · Docker Compose · psycopg2
+Python · pandas · PostgreSQL · Docker Compose · psycopg2 · pytest
 
 ## Project structure
 
@@ -43,8 +43,11 @@ Python · pandas · PostgreSQL · Docker Compose · psycopg2
 │   ├── transform.py     # clean and validate
 │   ├── load.py          # write to PostgreSQL
 │   └── pipeline.py      # runs the full pipeline
+├── tests/               # unit tests (pytest)
+├── dashboard/app.py     # Streamlit dashboard (in progress)
 ├── db/schema.sql        # database table definition
-└── docker-compose.yml   # PostgreSQL container
+├── Dockerfile           # pipeline image
+└── docker-compose.yml   # PostgreSQL + pipeline containers
 ```
 
 ## Getting started
@@ -69,15 +72,31 @@ python3 -m src.pipeline --start 2023-01-01 --end 2026-10-10
 python3 -m src.pipeline
 ```
 
+**Or run everything in Docker:**
+
+```bash
+docker compose up -d db
+docker compose build pipeline
+docker compose run --rm pipeline
+```
+
+**Run the tests:**
+
+```bash
+pytest
+```
+
 ## Roadmap
 
 - [x] Extract, transform, validate, load
 - [x] Historical backfill
 - [x] Incremental loads
-- [ ] Logging
-- [ ] Unit tests
-- [ ] Containerise the pipeline
+- [x] Logging
+- [x] Unit tests
+- [x] Containerise the pipeline
 - [ ] Streamlit dashboard
-- [ ] Daily scheduling# SA-weather-pipeline
+- [ ] Daily scheduling
+
+# SA-weather-pipeline
 
 WTC-STT86C2M
