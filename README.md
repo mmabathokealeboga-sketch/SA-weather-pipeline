@@ -6,7 +6,7 @@ An automated ETL pipeline that collects daily weather data for 8 South African c
 
 1. **Extract**: pulls daily weather from the [Open-Meteo](https://open-meteo.com/) archive API
 2. **Transform**: converts raw API data into a clean table (one row per city per day)
-3. **Validate**: rejects impossible readings (e.g. temperatures above 50°C, min higher than max)
+3. **Validate**: rejects impossible readings (temperatures outside -15°C to 50°C, min higher than max, negative rain, wind outside 0-200 km/h, missing values)
 4. **Load**: upserts into PostgreSQL, so re-running never creates duplicate rows
 
 The pipeline supports:
@@ -41,7 +41,7 @@ Python · pandas · PostgreSQL · Docker Compose · psycopg2 · pytest · Stream
 │   ├── transform.py     # clean and validate
 │   ├── load.py          # write to PostgreSQL
 │   └── pipeline.py      # runs the full pipeline
-├── tests/               # unit tests (pytest)
+├── tests/               # unit tests (pytest): extract, transform, load, pipeline
 ├── dashboard/
 │   ├── app.py           # Streamlit dashboard
 │   └── requirements.txt # dashboard dependencies
@@ -101,6 +101,7 @@ Then open http://localhost:8501
 
 ```bash
 chmod +x run_pipeline.sh
+mkdir -p logs        # cron writes its output here, so the folder must exist
 crontab -e
 ```
 
@@ -121,6 +122,7 @@ Add this line to run the pipeline every day at 08:00:
 - [x] Streamlit dashboard
 - [x] Daily scheduling
 
-# SA-weather-pipeline
 
-WTC-STT86C2M
+**WTC-STT86C2M**
+
+## Demo Video Link https://youtu.be/eWFZHE1u0pk
